@@ -1,0 +1,34 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+.terraform.lock.hcl
+
+# Packer
+packer_cache/
+*.pkr.hcl.lock
+
+# Packer var files (use .example files)
+packer/.auto.pkrvars.hcl
+packer/publish.pkrvars.hcl
+
+# Go
+test/vendor/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Teleport identity files
+*.identity
+identity
+
+# AMI build artifacts
+manifest.json

@@ -1,0 +1,10 @@
+# refer to https://github.com/DataDog/integrations-core/blob/master/openmetrics/datadog_checks/openmetrics/data/conf.yaml.example
+# https://goteleport.com/docs/management/diagnostics/metrics/#enabling-metrics
+init_config: {}
+instances:
+  - service: 'teleport-agent'
+    openmetrics_endpoint: 'http://127.0.0.1:3000/metrics'
+    metrics:
+      - '.+'
+    exclude_metrics:
+      - '^go_.+'

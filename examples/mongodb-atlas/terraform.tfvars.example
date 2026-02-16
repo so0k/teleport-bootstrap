@@ -1,0 +1,10 @@
+name_prefix = "teleport-mongodb-atlas"
+ami_id      = "ami-0123456789abcdef0"
+vpc_id      = "vpc-0123456789abcdef0"
+subnet_ids  = ["subnet-aaaa1111", "subnet-bbbb2222", "subnet-cccc3333"]
+aws_region  = "us-east-1"
+
+datadog_api_key_arn = "arn:aws:secretsmanager:us-east-1:111122223333:secret:datadog/api-key-AbCdEf"
+datadog_host_tags   = "env:production,service:teleport,role:mongodb-atlas"
+
+teleport_auth_server = "example.teleport.sh:443"

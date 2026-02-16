@@ -1,0 +1,7 @@
+[template]
+src = "teleport.yaml.tmpl"
+dest = "/etc/teleport.yaml"
+owner = "teleport"
+gid = 0
+mode = "0644"
+keys = ["teleport-etc/contents"]

@@ -1,0 +1,10 @@
+name_prefix = "myorg-teleport-complete"
+ami_id      = "ami-0123456789abcdef0"
+vpc_id      = "vpc-0123456789abcdef0"
+subnet_ids  = ["subnet-0123456789abcdef0", "subnet-0123456789abcdef1"]
+aws_region  = "us-east-1"
+
+datadog_api_key_arn = "arn:aws:secretsmanager:us-east-1:111111111111:secret:datadog/api-key-AbCdEf"
+datadog_host_tags   = "env:prod,service:teleport-agent"
+
+teleport_auth_server = "example.teleport.sh:443"

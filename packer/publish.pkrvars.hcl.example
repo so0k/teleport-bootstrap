@@ -1,0 +1,16 @@
+# Copy this file to publish.pkrvars.hcl and fill in your values
+ami_regions = [
+  # ensure KMS keys exist for each region
+  "us-east-1",
+  "us-west-2",
+  "eu-west-2",
+]
+ami_region_kms_key_ids = {
+  "us-east-1" = "arn:aws:kms:us-east-1:111111111111:alias/packer-ebs"
+  "us-west-2" = "arn:aws:kms:us-west-2:111111111111:alias/packer-ebs"
+  "eu-west-2" = "arn:aws:kms:eu-west-2:111111111111:alias/packer-ebs"
+}
+ami_org_arns = [
+  # aws organizations describe-organization --query Organization.Arn --output text
+  "arn:aws:organizations::111111111111:organization/o-exampleorgid",
+]

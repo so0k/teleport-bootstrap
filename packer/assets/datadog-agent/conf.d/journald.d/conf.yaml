@@ -1,0 +1,11 @@
+# Discover Datadog log collection: https://docs.datadoghq.com/integrations/journald/?tab=host
+logs:
+  # refer to journalctl -u atlantis -o json | tail -n 1 | jq -r '[.SYSLOG_IDENTIFIER,._SYSTEMD_UNIT,._COMM]'
+  # for values auto populated in `source`/`service`
+  - type: journald
+    path: /var/log/journal/
+    include_units:
+      # # agent logs are excluded at ingestion anyway.
+      # - datadog-agent.service
+      - confd.service
+      - teleport.service

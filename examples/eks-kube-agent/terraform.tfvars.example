@@ -1,0 +1,2 @@
+aws_region           = "us-east-1"
+teleport_auth_server = "teleport.example.com:443"

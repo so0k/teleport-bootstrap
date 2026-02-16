@@ -1,0 +1,92 @@
+name: Build and Publish Teleport Agent AMI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'packer/**'
+
+env:
+  PACKER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        architecture: ['arm64']
+    runs-on: ubuntu-latest
+    name: build-teleport-agent
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.0.2
+        with:
+          aws-region: us-east-1
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN_BUILD }}
+
+      - name: Use Packer 1.9.5
+        uses: hashicorp-contrib/setup-packer@v3
+        with:
+          packer-version: 1.9.5
+
+      - name: Init Packer template
+        run: packer init .
+        working-directory: packer
+
+      - name: Validate Packer template
+        run: packer validate -syntax-only .
+        working-directory: packer
+
+      - name: Build Artifact
+        run: packer build -var-file "publish.pkrvars.hcl" -on-error=abort .
+        env:
+          PACKER_LOG: 1
+          PKR_VAR_architecture: ${{ matrix.architecture }}
+        working-directory: packer
+
+      - name: Update AMI map and create PR
+        env:
+          ARCH: ${{ matrix.architecture }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          AMI_MAP="ami_map.yaml"
+          jq '.builds[0].artifact_id | (split(",") | map(split(":")) | map({(.[0]): .[1]}) | add)' packer/manifest.json | yq -P > "${AMI_MAP}"
+          branch="chore-bump-teleport-agent-${ARCH}-${GITHUB_SHA:0:7}"
+          message="chore: bump teleport-agent ${ARCH} ami from ${GITHUB_SHA:0:7}"
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git checkout -b "${branch}"
+          git add "${AMI_MAP}"
+          git commit -m"${message}"
+          git push -u origin "${branch}"
+          gh pr create \
+            --title "chore(main): ${message}" \
+            --body "Bump \`${AMI_MAP}\` from ${GITHUB_SHA:0:7}." \
+            --label "automated,ami-map"
+
+  notify:
+    if: failure()
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Notify of build failure
+        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "github_repo": "${{ github.repository }}",
+              "branch_name": "${{ github.ref_name }}",
+              "workflow_name": "${{ github.workflow }}",
+              "workflow_run_link": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

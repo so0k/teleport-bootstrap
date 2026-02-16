@@ -1,0 +1,28 @@
+# ---------------------------------------------------------------------------
+# General
+# ---------------------------------------------------------------------------
+name_prefix = "myorg-teleport-elasticache"
+ami_id      = "ami-0123456789abcdef0" # Replace with your Teleport agent AMI
+vpc_id      = "vpc-0123456789abcdef0"
+subnet_ids  = ["subnet-aaa111", "subnet-bbb222", "subnet-ccc333"]
+aws_region  = "us-east-1"
+
+# ---------------------------------------------------------------------------
+# DataDog
+# ---------------------------------------------------------------------------
+datadog_api_key_arn = "arn:aws:secretsmanager:us-east-1:111111111111:secret:datadog/api-key-AbCdEf"
+datadog_host_tags   = "env:production,service:teleport,team:platform"
+
+# ---------------------------------------------------------------------------
+# Teleport
+# ---------------------------------------------------------------------------
+teleport_auth_server = "example.teleport.sh:443"
+
+# ---------------------------------------------------------------------------
+# ElastiCache Discovery
+# ---------------------------------------------------------------------------
+# Only discover clusters tagged with this key/value pair.
+# Set to {"*" = "*"} to discover every ElastiCache cluster in the region.
+elasticache_discovery_tags = {
+  "teleport-discovery" = "enabled"
+}

@@ -1,0 +1,4 @@
+[tools]
+"asdf:mise-plugins/mise-teleport-community" = "latest"
+bun = "latest"
+node = "20"

@@ -1,0 +1,18 @@
+api_key:
+ec2_prefer_imdsv2: true
+# See https://docs.datadoghq.com/graphing/infrastructure/process/
+process_config:
+  process_collection:
+    enabled: true
+## https://docs.datadoghq.com/agent/logs/
+logs_enabled: true
+# logs_config:
+## https://docs.datadoghq.com/agent/logs/advanced_log_collection/#global-processing-rules
+# processing_rules:
+#   - type: <RULE_TYPE>
+#     name: <RULE_NAME>
+#     pattern: <RULE_PATTERN>
+
+## https://docs.datadoghq.com/agent/apm/
+# apm_config:
+#   enabled: true
