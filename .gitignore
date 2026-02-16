@@ -29,6 +29,15 @@ Thumbs.db
 # Teleport identity files
 *.identity
 identity
+teleport-identity
+
+# Test runtime data
+test/teleport/config.yaml
+test/teleport/data/
+test/stdout.log
+test/stderr.log
+test/SANDBOX_CLEANUP.md
+test/terraform/terraform.tfvars
 
 # AMI build artifacts
 manifest.json
